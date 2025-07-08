@@ -1,0 +1,4 @@
+ 
+ docker compose exec ckan ckan user add admin email=admin@localhost
+ docker compose exec ckan ckan sysadmin add admin 
+ docker compose exec ckan ckan user add eric email=erico.perrone@igg.cnr.it

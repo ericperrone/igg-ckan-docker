@@ -1,0 +1,48 @@
+FROM ghcr.io/mjanez/ckan-docker:ckan-2.10.5
+LABEL maintainer="mnl.janez@gmail.com"
+
+# Set up environment variables
+ENV APP_DIR=/srv/app
+ENV TZ=UTC
+
+# Set working directory
+WORKDIR ${APP_DIR}
+
+# Make sure both files are not exactly the same
+RUN echo ${TZ} > /etc/timezone && \
+    if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then \
+        cp /usr/share/zoneinfo/${TZ} /etc/localtime ; \
+    fi ;
+
+# Used to configure the container environment by setting environment variables, creating users, running initialization scripts, .etc
+COPY docker-entrypoint.d/* docker-entrypoint.d/
+
+# Apply any patches needed to CKAN core
+COPY patches patches
+
+#  Updated version of the Dockerfile RUN command that skips applying a patch if a reversed or previously applied patch is detected
+RUN for d in $APP_DIR/patches/*; do \
+    if [ -d $d ]; then \
+        for f in `ls $d/*.patch | sort -g`; do \
+            cd $SRC_DIR/`basename "$d"` && \
+            if patch -R --dry-run -p1 < "$f"; then \
+                echo "$0: Patch $f has already been applied or reversed, skipping..."; \
+            else \
+                echo "$0: Applying patch $f to $SRC_DIR/`basename $d`"; \
+                sed -i 's/\r$//' "$f" && \
+                patch -p1 < "$f" ; \
+            fi \
+        done ; \
+    fi ; \
+done
+
+# Workers
+## Update start_ckan.sh with custom workers
+COPY setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
+RUN chmod +x ${APP_DIR}/start_ckan.sh
+
+## Load workers supervisor configuration
+COPY setup/workers/* /etc/supervisord.d/
+
+# Start CKAN
+CMD ["/bin/sh", "-c", "$APP_DIR/start_ckan.sh"]

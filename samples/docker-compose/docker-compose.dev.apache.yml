@@ -1,0 +1,129 @@
+volumes:
+  ckan_storage:
+  ckan_logs:
+  pg_data:
+  solr_data:
+  pip_cache:
+  site_packages:
+  vscode_server:
+
+
+services:
+  apache:
+    build:
+      context: apache/
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      - CKAN_COMPOSE_SERVICE=${CKAN_DEV_COMPOSE_SERVICE}
+      - PROXY_CKAN_PROXY_PASS=http://${CKAN_DEV_COMPOSE_SERVICE}:5000
+    depends_on:
+      - ${CKAN_DEV_COMPOSE_SERVICE}
+    ports:
+      - "0.0.0.0:${APACHE_PORT_HOST}:${APACHE_PORT}"
+    restart: on-failure:3
+  
+  ckan-dev:
+    build:
+      context: ckan/
+      dockerfile: Dockerfile.dev
+      args:
+        - TZ=${TZ}
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    links:
+      - db
+      - solr
+      - redis
+    ports:
+      - "0.0.0.0:${CKAN_PORT_HOST}:5000"
+    volumes:
+      - ckan_storage:/var/lib/ckan
+      - ckan_logs:/var/log
+      - ./src:/srv/app/src_extensions
+      - pip_cache:/root/.cache/pip
+      - site_packages:/usr/lib/python3.9/site-packages
+      - vscode_server:/root/.vscode-server
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:5000"]
+
+  pycsw:
+    build:
+      context: ckan-pycsw/
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    depends_on:
+      - ${CKAN_DEV_COMPOSE_SERVICE}
+    ports:
+      - "0.0.0.0:${PYCSW_PORT_HOST}:${PYCSW_PORT}"
+    volumes:
+        - ./log:${APP_DIR}/log
+        - ./metadata:${APP_DIR}/metadata
+    restart: on-failure:3
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:${PYCSW_PORT}"]
+    
+  db:
+    build:
+      context: postgresql/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - CKAN_DB_USER
+      - CKAN_DB_PASSWORD
+      - CKAN_DB
+      - DATASTORE_READONLY_USER
+      - DATASTORE_READONLY_PASSWORD
+      - DATASTORE_DB
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+     
+  solr:
+    build:
+      context: solr/
+      dockerfile: Dockerfile.spatial
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    volumes:
+      - solr_data:/var/solr
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:${SOLR_PORT}/solr/"]
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "100m"
+          max-file: "10"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-e", "QUIT"]
