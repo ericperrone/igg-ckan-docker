@@ -1,3 +1,4 @@
+
 <p align="center">
   <picture>
     <img src="./doc/img/ckan-docker-logo.png" style="height:100px">

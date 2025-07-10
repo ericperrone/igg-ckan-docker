@@ -1,0 +1,48 @@
+# generic
+.DS_Store
+.vagrant
+
+# code & config
+_service-provider/*
+_solr/schema.xml
+_src/*
+local/*
+.vscode
+__pycache__
+log/*
+!log/README.md
+metadata/*
+!metadata/README.md
+src/*
+!src/README.md
+
+# environment
+.env
+.env.*
+pycsw.conf.template.*
+index.html.*
+
+# environment allowlist
+!.env.example
+!.env.codespaces
+!.env.es.example
+!.env.dev.example
+samples/api/*
+
+# docker compose files
+docker-compose.local-*.yml
+
+# CKANAPI scripts
+doc/scripts/ckanapi/*_ckanapi.py
+!doc/scripts/ckanapi/*sample_ckan_api.py
+doc/scripts/ckanapi/sites.yml
+sites.yml
+venv
+env
+
+# Solr $ CKAN custom Dockerfiles
+!solr/Dockerfile.spatial
+solr/Dockerfile.*
+!ckan/Dockerfile.dev
+!ckan/Dockerfile.ghcr
+ckan/Dockerfile.*
