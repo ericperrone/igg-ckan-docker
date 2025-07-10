@@ -89,7 +89,7 @@ done
 
 # Workers
 ## Update start_ckan.sh with custom workers
-COPY mysrc/validators.py /srv/app/ckanext-schemingdcat/ckanext/schemingdcat/validators.py
+COPY mysrc/validators.py ${APP_DIR}/ckanext-schemingdcat/ckanext/schemingdcat/validators.py
 COPY setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
 RUN chmod +x ${APP_DIR}/start_ckan.sh
 
