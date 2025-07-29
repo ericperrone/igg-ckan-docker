@@ -1,0 +1,40 @@
+server {
+    listen 443 ssl;
+    server_name poseidone.igg.cnr.it;
+
+    ssl_certificate     /etc/nginx/certs/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/certs/selfsigned.key;
+
+    # Landing page root, se vuoi una pagina statica o un proxy al servizio che la serve
+    location = / {
+        # Se la landing page è statica nel container nginx (html/)
+        root /usr/share/nginx/html;  # o path corretto
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+
+    # CSW endpoint
+    location /csw/ {
+        proxy_pass http://pycsw:8000/csw/;  # metti il tuo backend CSW
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # CKAN con prefisso /catalog
+    location /catalog/ {
+        proxy_pass http://ckan:5000/catalog/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # Riscrittura URL nei contenuti per CKAN
+        sub_filter_types text/css application/javascript;
+        sub_filter_once off;
+        sub_filter '/webassets/' '/catalog/webassets/';
+        sub_filter '/base/' '/catalog/base/';
+        proxy_buffering off;
+    }
+
+    # Se ti serve altro, aggiungilo qui
+}

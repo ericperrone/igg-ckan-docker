@@ -79,14 +79,16 @@ services:
     depends_on:
       - ${CKAN_DEV_COMPOSE_SERVICE}
     ports:
-      - "0.0.0.0:${PYCSW_PORT_HOST}:${PYCSW_PORT}"
+      - "0.0.0.0:8000:8000"
     volumes:
         - ./log:${APP_DIR}/log
         - ./metadata:${APP_DIR}/metadata
     restart: on-failure:3
     healthcheck:
-      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:${PYCSW_PORT}"]
-    
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
   db:
     build:
       context: postgresql/

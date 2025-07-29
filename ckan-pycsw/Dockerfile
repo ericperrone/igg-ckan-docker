@@ -20,5 +20,6 @@ WORKDIR ${APP_DIR}
 
 # Update files if needed
 COPY pycsw/conf/pycsw.conf.template docker-entrypoint.d/entrypoint.sh ./
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pycsw.wsgi:application"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8000", "pycsw.wsgi:application"]
+CMD ["gunicorn", "--timeout", "300", "--bind", "0.0.0.0:8000", "pycsw.wsgi:application"]
 ENTRYPOINT ["/bin/bash", "./entrypoint.sh"]

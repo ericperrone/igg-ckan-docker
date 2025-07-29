@@ -1,16 +1,14 @@
 server {
-    listen       ${NGINX_PORT};
-    listen  [::]:${NGINX_PORT};
-    listen       ${NGINX_SSLPORT} ssl;
-    listen  [::]:${NGINX_SSLPORT} ssl;
-    server_name  ${PROXY_SERVER_NAME};
-    client_max_body_size ${CKAN__MAX_RESOURCE_SIZE}M;
-   # ssl_certificate /etc/nginx/certs/ckan-local.crt;
-   # ssl_certificate_key /etc/nginx/certs/ckan-local.key;
-    ssl_certificate /etc/nginx/certs/selfsigned.crt;
-    ssl_certificate_key /etc/nginx/certs/selfsigned.key;
+    listen       80;
+    listen  [::]:80;
+    listen       443 ssl;
+    listen  [::]:443 ssl;
+    server_name  poseidone.igg.cnr.it;
+    client_max_body_size 100M;
+    ssl_certificate /etc/nginx/certs/ckan-local.crt;
+    ssl_certificate_key /etc/nginx/certs/ckan-local.key;
 
-    root $NGINX_SHARE_HTML_DIR;
+    root /usr/share/nginx/html;
     index index.html;
     # PROXY_PYCSW_PROXY_PASS=http://pycsw
 
@@ -30,7 +28,7 @@ server {
 
     # CKAN location with and without the slash appended (https://nginx.org/en/docs/http/ngx_http_core_module.html#location)
     location /catalog/ {
-        proxy_pass ${PROXY_CKAN_PROXY_PASS}/;
+        proxy_pass http://ckan:5000/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
         #proxy_cache cache;
@@ -41,7 +39,7 @@ server {
     }
 
     location = /catalog {
-        proxy_pass ${PROXY_CKAN_PROXY_PASS}/;
+        proxy_pass http://ckan:5000/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
         #proxy_cache cache;
@@ -53,7 +51,7 @@ server {
 
     # PYCSW location with and without the slash appended
     location /csw/ {
-        proxy_pass ${PROXY_PYCSW_PROXY_PASS}/;
+        proxy_pass http://pycsw:8000/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
         #proxy_cache cache;
@@ -64,7 +62,7 @@ server {
     }
 
     location = /csw {
-        proxy_pass ${PROXY_PYCSW_PROXY_PASS}/;
+        proxy_pass http://pycsw:8000/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
         #proxy_cache cache;
@@ -74,12 +72,6 @@ server {
         proxy_cache_key $host$scheme$proxy_host$request_uri;
     }
 
-    location /catalog/uploads/ {
-        alias /var/lib/ckan/uploads/;
-        access_log off;
-        log_not_found off;
-    }
-
     error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 422 423 424 425 426 428 429 431 451 500 501 502 503 504 505 506 507 508 510 511 /error.html;
 
     # redirect server error pages to the static page /error.html
@@ -87,6 +79,6 @@ server {
     # robots.txt
     location = /robots.txt {
         add_header Content-Type text/plain;
-        root $NGINX_SHARE_HTML_DIR;
+        root /usr/share/nginx/html;
     }
 }

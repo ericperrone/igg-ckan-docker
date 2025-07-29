@@ -24,6 +24,7 @@ COPY req_fixes req_fixes
 ## Fluent - v1.0.1  (mjanez/Forked stable version) ##
 ## OpenAPI - v1.0.0 (mjanez stable version) ##
 ## Scheming DCAT - v4.5.3 (mjanez/GeoDCAT-AP/NTI-RISP extended version) ##
+##COPY mysrc/ckanext-xloader /srv/app/src/ckanext-xloader 
 RUN echo ${TZ} > /etc/timezone && \
     if ! [ /usr/share/zoneinfo/${TZ} -ef /etc/localtime ]; then cp /usr/share/zoneinfo/${TZ} /etc/localtime; fi && \
     # Install patch utility
@@ -31,9 +32,14 @@ RUN echo ${TZ} > /etc/timezone && \
     apt-get install -y patch \
     # Install cron for scheduled tasks
     cron && \
+#    pip install -U celery && \
     # Install CKAN extensions
     echo "ckan/ckanext-xloader" && \
     pip3 install --no-cache-dir -e git+https://github.com/mjanez/ckanext-xloader.git@1.0.1-stable#egg=ckanext-xloader && \ 
+#    pip3 install --no-cache-dir -e git+https://github.com/mjanez/ckanext-xloader.git@ckan-2.10-compatible#egg=ckanext-xloader && \
+#    pip3 install --no-cache-dir -e git+https://github.com/mjanez/ckanext-xloader.git@5434cc125db5a87d5e11306e8c65d25b5becc3cf#egg=ckanext-xloader && \
+#    pip3 install --no-cache-dir -e git+https://github.com/mjanez/ckanext-xloader.git@main#egg=ckanext-xloader && \
+    pip3 install --no-cache-dir -e /srv/app/src/ckanext-xloader && \  
     pip3 install --no-cache-dir -r ${APP_DIR}/src/ckanext-xloader/requirements.txt && \
     pip3 install --no-cache-dir -U requests[security] && \
     echo "ckan/ckanext-harvest" && \
@@ -65,7 +71,7 @@ RUN echo ${TZ} > /etc/timezone && \
     # Remove system cache
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
+#RUN pip install celery>=5.2.0
 # Used to configure the container environment by setting environment variables, creating users, running initialization scripts, .etc
 COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
@@ -86,6 +92,10 @@ RUN for d in $APP_DIR/patches/*; do \
         done ; \
     fi ; \
 done
+
+# Copy sertificates in ckan container
+COPY selfsigned.crt /usr/local/share/ca-certificates/selfsigned.crt
+RUN update-ca-certificates
 
 # Workers
 ## Update start_ckan.sh with custom workers
