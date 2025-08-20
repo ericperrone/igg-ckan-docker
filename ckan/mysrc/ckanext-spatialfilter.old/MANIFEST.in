@@ -1,0 +1,2 @@
+recursive-include ckanext/spatialfilter/assets *
+recursive-include ckanext/spatialfilter/public *

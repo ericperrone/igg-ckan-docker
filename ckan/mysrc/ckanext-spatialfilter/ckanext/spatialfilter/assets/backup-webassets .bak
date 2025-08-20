@@ -1,0 +1,15 @@
+spatialfilter-css:
+  contents:
+    - css/spatial_query.css
+  filters: cssrewrite
+  output: spatialfilter/spatial_query.css
+  extra:
+    url: spatialfilter/css
+
+spatialfilter-js:
+  contents:
+    - js/spatial_query.js
+  filters: rjsmin
+  output: spatialfilter/spatial_query.js
+  extra:
+    url: spatialfilter/js

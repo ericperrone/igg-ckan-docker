@@ -99,6 +99,7 @@ RUN update-ca-certificates
 
 # Workers
 ## Update start_ckan.sh with custom workers
+COPY mysrc/webassets.yml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/assets
 COPY mysrc/validators.py ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/validators.py
 COPY mysrc/ckanext-spatialfilter ${APP_DIR}/src/ckanext-spatialfilter
 RUN pip install -e ${APP_DIR}/src/ckanext-spatialfilter

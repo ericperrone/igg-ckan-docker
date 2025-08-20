@@ -1,0 +1,27 @@
+utilizzo ckan ultima versione.
+ho scritto una nuova extension "spatialfilter" perché voglio fare l'override dei contenuti statici: "spatial_query.css" e "spatial_query.js".
+Per fare questo nella directory della extension ho creato la directory: 
+- ckanext-spatialfilter\ckanext\spatialfilter\public\css
+- ckanext-spatialfilter\ckanext\spatialfilter\public\js
+E ho messo lì i miei nuovi file "spatial_query.css" e "spatial_query.js".
+L'estensione viene caricata correttamente e funziona. Ma i nuovi js e css non vengono caricati.
+Il contenuto di "plugin.py" è il seguente:
+import os
+from ckan.plugins import implements, SingletonPlugin
+from ckan.plugins.interfaces import IConfigurer
+import ckan.plugins.toolkit as toolkit
+
+class SpatialFilterPlugin(SingletonPlugin):
+    implements(IConfigurer)
+
+    def update_config(self, config):
+        here = os.path.dirname(__file__)
+        template_dir = os.path.join(here, 'templates')
+        toolkit.add_template_directory(config, template_dir)
+        public_dir = os.path.join(here, 'public')
+        toolkit.add_public_directory(config, public_dir)
+		
+		
+		2025-08-18 14:35:23,021 ERROR [ckan.lib.webassets_tools] Trying to include unknown asset: <ckanext-spatial/spatial_query.js>
+		
+		lavorare su /webassets.yml !!!!!
