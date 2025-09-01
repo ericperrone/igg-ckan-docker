@@ -75,6 +75,8 @@ this.ckan.module('spatial-query', function ($, _) {
           this.options.default_extent = new L.GeoJSON(user_default_extent).getBounds();
         }
       }
+	  // AGGIUNTO PER CENTRARE LA MAPPA SULL'ITALIA
+	  this.options.default_extent = [[35.5, 6.6], [49.3, 19.1]];
       this.el.ready(this._onReady);
     },
 
