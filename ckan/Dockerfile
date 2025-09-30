@@ -99,6 +99,19 @@ RUN update-ca-certificates
 
 # Workers
 ## Update start_ckan.sh with custom workers
+
+# Installa le dependencies per ckanext-doi
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install ckantools datacite jsonschema xmltodict
+
+# Installa ckanext-doi direttamente dal repo Git (versione compatibile CKAN 2.10)
+RUN pip install -e git+https://github.com/NaturalHistoryMuseum/ckanext-doi.git@main#egg=ckanext-doi
+
+# Copia uno script di entrypoint personalizzato, necessario per le modifiche al db.
+COPY mysrc/entrypoint.sh /srv/app/entrypoint.sh
+RUN chmod +x /srv/app/entrypoint.sh
+
+# IGG patches and extensions
 COPY mysrc/webassets.yml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/assets
 COPY mysrc/validators.py ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/validators.py
 COPY mysrc/ckanext-iggtheme ${APP_DIR}/src/ckanext-iggtheme
@@ -113,4 +126,6 @@ RUN chmod +x ${APP_DIR}/start_ckan.sh
 COPY setup/workers/* /etc/supervisord.d/
 
 # Start CKAN
-CMD ["/bin/sh", "-c", "$APP_DIR/start_ckan.sh"]
+# CMD ["/bin/sh", "-c", "$APP_DIR/start_ckan.sh"]
+CMD ["/srv/app/entrypoint.sh"]
+# CMD ["/bin/sh", "-c", "/srv/app/entrypoint.sh"]

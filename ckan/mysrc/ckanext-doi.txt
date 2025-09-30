@@ -1,0 +1,27 @@
+Installazione di ckanext-doi
+============================
+| Fase                                     | Azione                                                                                  | Dettagli / esempi                                                                                                                                                                                                                                                                                                     |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Aggiungere il plugin                  | Inserisci `doi` nella lista dei plugin in `ckan.ini` (o nel tuo file di configurazione) | `ckan.plugins = ... doi` ([ckanext-doi.readthedocs.io][1])                                                                                                                                                                                                                                                            |
+| 2. Inizializzare / migrare database      | Esegui le migrazioni relative all’estensione                                            | `ckan -c /path/to/ckan.ini db upgrade -p doi` ([ckanext-doi.readthedocs.io][1]) <br> (o il comando equivalente `doi initdb` nelle versioni precedenti) ([GitHub][2])                                                                                                                                                  |
+| 3. Configurare le credenziali DataCite   | Nel file `ckan.ini`, aggiungi le seguenti configurazioni richieste:                     | - `ckanext.doi.account_name` – il nome account del repository DataCite ([ckanext-doi.readthedocs.io][3]) <br> - `ckanext.doi.account_password` – la password dell’account ([ckanext-doi.readthedocs.io][3]) <br> - `ckanext.doi.prefix` – il prefisso DOI assegnato (es: `10.xxxx`) ([ckanext-doi.readthedocs.io][3]) |
+| 4. Configurare l’istituzione / publisher | Sempre nel file di configurazione                                                       | - `ckanext.doi.publisher` – il nome dell’istituzione che “pubblica” i DOI ([ckanext-doi.readthedocs.io][3])                                                                                                                                                                                                           |
+| 5. Modalità test / debug                 | Se vuoi sperimentare prima di operare in produzione                                     | - `ckanext.doi.test_mode = True/False` ([ckanext-doi.readthedocs.io][3]) <br> Se in modalità test, i DOI non verranno registrati sul live, ma verrà usato l’ambiente di test DataCite. ([ckanext-doi.readthedocs.io][3])                                                                                              |
+| 6. Altre opzioni (facoltative)           | Per personalizzazioni                                                                   | - `ckanext.doi.site_url` – URL del tuo CKAN (usato per link di ritorno) ([ckanext-doi.readthedocs.io][3]) <br> - `ckanext.doi.site_title` – titolo del sito per le citazioni ([ckanext-doi.readthedocs.io][3])                                                                                                        |
+
+[1]: https://ckanext-doi.readthedocs.io/en/stable/installation/?utm_source=chatgpt.com "Installation - ckanext-doi"
+[2]: https://github.com/NaturalHistoryMuseum/ckanext-doi?utm_source=chatgpt.com "NaturalHistoryMuseum/ckanext-doi: A CKAN extension for assigning ..."
+[3]: https://ckanext-doi.readthedocs.io/en/dev/configuration/?utm_source=chatgpt.com "Configuration - ckanext-doi"
+
+ckan.plugins = stats doi ... altri_plugin
+
+Configurazione di ckanext-doi
+=============================
+# Configurazioni per ckanext-doi
+ckanext.doi.account_name = IL_TUO_ACCOUNT_DATACITE
+ckanext.doi.account_password = LA_TUA_PASSWORD
+ckanext.doi.prefix = 10.1234
+ckanext.doi.publisher = “Nome Istituzione”
+ckanext.doi.test_mode = True
+ckanext.doi.site_url = http://tuo.ckan.org
+ckanext.doi.site_title = “Titolo del Portale Open Data”
