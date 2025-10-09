@@ -120,6 +120,13 @@ COPY mysrc/ckanext-spatialfilter ${APP_DIR}/src/ckanext-spatialfilter
 RUN pip install -e ${APP_DIR}/src/ckanext-spatialfilter
 COPY setup/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
 RUN chmod +x ${APP_DIR}/start_ckan.sh
+COPY mysrc/yaml/eu_geodcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/geodcat_ap
+COPY mysrc/yaml/es_geodcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/geodcat_ap
+COPY mysrc/yaml/dcat_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/dcat
+COPY mysrc/yaml/eu_dcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/dcat_ap
+COPY mysrc/yaml/es_dcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/dcat_ap
+COPY mysrc/yaml/dcat_document.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/resources
+
 # RUN ckan generate static
 
 ## Load workers supervisor configuration
