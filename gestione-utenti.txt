@@ -46,7 +46,11 @@ Comandi "ckanapi user":
    - member
    - editor
    - admin
-   
+ 
+ Per eliminare l'associazione di un utente ad una organizzazione:
+ 
+ ckanapi -c ./ckan.ini action organization_member_delete id=<nome_organizzazione> username=<nome_utente>
+ 
  Per avere la lista completa degli utenti associati ad una organizzazione utiliizare:
 
  ckanapi -c ./ckan.ini action organization_show id=<nome_organizzazione> include_users=True 
