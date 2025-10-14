@@ -1,5 +1,12 @@
 === Appunti gestione utenti ===
 
+IMPORTANTE
+----------
+I comandi riportati nel seguito devono essere utilizzati all'interno del container, quindi prima di utilizzarli occorre aprire il container in modalità "terminale",
+ad esempio utilizzando questo genere di comando: docker exec -it igg-ckan-docker-ckan-1 bash
+Se vogliamo utilizzarli al di fuori del container occorre che tutti i comandi siano preceduti da: docker compose exec ckan
+
+
 Comandi "ckan user":
 ===================
   add      Add new user
