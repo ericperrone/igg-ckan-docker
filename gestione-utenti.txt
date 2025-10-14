@@ -35,7 +35,7 @@ Comandi "ckan user":
 Comandi "ckanapi user":
 ======================	   
 
- Associazione di un utente a un ruolo e una organizzazione:
+ *** Associazione di un utente a un ruolo e una organizzazione:
  
  ckanapi -c /srv/app/ckan.ini action organization_member_create \
   id=<nome_organizzazione> \
@@ -47,10 +47,15 @@ Comandi "ckanapi user":
    - editor
    - admin
  
- Per eliminare l'associazione di un utente ad una organizzazione:
+ *** Per eliminare l'associazione di un utente ad una organizzazione:
  
  ckanapi -c ./ckan.ini action organization_member_delete id=<nome_organizzazione> username=<nome_utente>
  
- Per avere la lista completa degli utenti associati ad una organizzazione utiliizare:
+ *** Per avere la lista completa degli utenti associati ad una organizzazione utiliizare:
 
  ckanapi -c ./ckan.ini action organization_show id=<nome_organizzazione> include_users=True 
+
+ *** Per rendere pubblico un dataset creato da un editor (dunque privato per default).
+ 
+  ckanapi -c /srv/app/ckan.ini action package_patch id=<nome_dataset> private=false
+  dove nome_dataset è il nome "interno" assegnato da ckan (quello che compare nella url del dataset).
