@@ -1,0 +1,52 @@
+=== Appunti gestione utenti ===
+
+Comandi "ckan user":
+===================
+  add      Add new user
+  list     List all users
+  remove   Remove user
+  setpass  Set password for the user.
+  show     Show user
+  token    Manage API Tokens
+ 
+ Ad esempio, se si vuole avere la lista degli utenti:
+  > ckan user list
+ 
+ Se si vuole aggiungere un nuovo utente:
+  > ckan user add [OPTIONS] USERNAME [ARGS]
+ 
+ ES.: ckan user add pippo => crea l'utente pippo in modo interattivo: verranno richieste la mail dell'utente e la password.
+ 
+ *IMPORTANTE* creazione di un utente sysadmin. 
+ Per creare un utente di nome "eugenio" e di tipo sysadmin, basta inserire normalmente l'utente e poi promuoverlo:
+  > ckan user add eugenio
+  > ckan sysadmin add eugenio 
+ NOTA: la promozione di un utente a sysadmin a linea di comando è importante solo la prima volta. L'interfaccia web di ckan consente di 
+ promuovere gli utenti se si fa login come utente sysadmin.
+ 
+ Se si vogliono ottenere informazioni su un utente:
+  > ckan user show [OPTIONS] USERNAME
+  
+ Es.: ckan user show pippo => mostra un json con alcune info sull'utente: *NON* mostra l'associazione fra utente e organizzazioni.
+ 
+ NOTA: L'associazione fra utenti e organizzazioni è fondamentale per poter caricare e gestire dati. 
+       I comandi "ckan" non consentono di gestire questo aspetto.
+	   
+Comandi "ckanapi user":
+======================	   
+
+ Associazione di un utente a un ruolo e una organizzazione:
+ 
+ ckanapi -c /srv/app/ckan.ini action organization_member_create \
+  id=<nome_organizzazione> \
+  username=<nome_utente> \
+  role=<nome_ruolo>
+  
+  I ruoli possibili sono: 
+   - member
+   - editor
+   - admin
+   
+ Per avere la lista completa degli utenti associati ad una organizzazione utiliizare:
+
+ ckanapi -c ./ckan.ini action organization_show id=<nome_organizzazione> include_users=True 
