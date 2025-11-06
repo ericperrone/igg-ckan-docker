@@ -393,6 +393,7 @@ dataset_fields:
   required: True
   display_property: dct:identifier
   form_placeholder: 123e4567-e89b-12d3-a456-426614174000
+  form_snippet: scheming/form_snippets/name_autogen.html
   help_text:
     en: e.g. Unique resource identifier (UUID).
     es: Ej. Identificador único de recurso (UUID).
@@ -411,6 +412,7 @@ dataset_fields:
     en: URL title Dataset
     es: Título de la URL del Dataset
   form_slug_related: identifier
+  form_snippet: scheming/form_snippets/link_schema.html
   form_group_id: identification
 
 - field_name: url
@@ -1348,7 +1350,7 @@ dataset_fields:
       - field_name: name
   validators: schemingdcat_fill_dependent_fields
   display_property: dcat:contactPoint
-  form_placeholder: José Blanco
+  form_placeholder: Contact Name
   form_group_id: contact
 
 # Metadata point of contact email (M)
@@ -1364,7 +1366,7 @@ dataset_fields:
   required: True
   display_property: vcard:hasEmail
   display_snippet: email.html
-  form_placeholder: joseblanco@example.com
+  form_placeholder: Contact email
   form_group_id: contact
 
 # Metadata point of contact Web (R)

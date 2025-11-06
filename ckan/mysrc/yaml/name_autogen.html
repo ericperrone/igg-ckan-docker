@@ -1,0 +1,19 @@
+<div class="form-group control-medium">
+<label class="form-label" for="field-identifier"><span title="This field is required" class="control-required">*</span> Metadata identifier</label>
+<div class="controls ">
+<input type="text" name="identifier" id="field-identifier" class="form-control" data-module="slug-preview-target"
+       value="" placeholder="{{ field.form_placeholder }}" />
+</div>
+</div>
+<script>
+  // var nameField = document.getElementById("field-identifier");
+  var nameField = document.getElementsByName("identifier")[0];
+  document.addEventListener("DOMContentLoaded", function () {
+    nameField = document.getElementById("field-identifier");
+    if (nameField && !nameField.value) {
+      const randomId = Math.random().toString(36).substring(2, 10) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 12);
+      // const randomId = Math.random().toString(36).substring(2, 10) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 6) + '-' +  Math.random().toString(36).substring(2, 14);
+      nameField.value =  randomId;
+    }
+  });
+</script>

@@ -126,6 +126,8 @@ COPY mysrc/yaml/dcat_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schem
 COPY mysrc/yaml/eu_dcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/dcat_ap
 COPY mysrc/yaml/es_dcat_ap_full.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/dcat_ap
 COPY mysrc/yaml/dcat_document.yaml ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/schemas/resources
+COPY mysrc/yaml/name_autogen.html ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/templates/scheming/form_snippets
+COPY mysrc/yaml/link_schema.html ${APP_DIR}/src/ckanext-schemingdcat/ckanext/schemingdcat/templates/scheming/form_snippets
 
 # RUN ckan generate static
 

@@ -1,0 +1,29 @@
+<label style="margin-top: 6px;">Dataset URL</label>
+<div style="width:100%; margin-bottom: 6px;" id="auto-text-url"></div>
+<!--
+<div class="form-group control-medium">
+  <div class="controls ">
+        <div class="input-group">
+                <input id="field-identifier" type="text" name="name" value="" placeholder="URL title Dataset"  data-module="slug-preview-slug" data-module-prefix="localhost:8443/catalog/dataset/" data-module-placeholder="&lt;dataset&gt;"
+                 class="form-control"/>
+        </div>
+  </div>
+</div>-->
+        <div class="input-group">
+                <input id="field-identifier" type="text" name="name" value="" placeholder="URL title Dataset"  data-module="slug-preview-slug" data-module-prefix="localhost:8443/catalog/dataset/" data-module-placeholder="&lt;dataset&gt;"
+                 class="form-control" style="display:none;"/>
+        </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const items = document.getElementsByName("name");
+    console.log(items);
+    const item = items[0];
+    let prefix = item.getAttribute('data-module-prefix');
+
+    if (nameField && nameField.value) {
+        item.value = nameField.value;
+        document.getElementById('auto-text-url').innerHTML = prefix + nameField.value;
+    }
+  });
+</script>
