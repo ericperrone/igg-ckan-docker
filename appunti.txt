@@ -1,0 +1,9 @@
+Installare: ckanext-organization_logo
+
+cd /srv/app/src
+git clone https://github.com/ckan/ckanext-organization_logo.git
+
+cd ckanext-organization_logo
+python setup.py develop
+
+ckan.plugins = ... organization_logo ...
