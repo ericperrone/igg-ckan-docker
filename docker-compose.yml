@@ -18,6 +18,9 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    volumes:
+      - ./ckan-pycsw/pycsw/pycsw.cfg:/etc/pycsw.cfg
+      - ./ckan-pycsw/pycsw/repository:/var/lib/pycsw      
 #    healthcheck:
 #      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1:8000"]
 #      interval: 30s
