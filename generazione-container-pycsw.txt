@@ -1,0 +1,10 @@
+*** Istruzioni per riconfigurare correttamente pycsw se si ricrea il container ***
+
+Dopo aver ricreato (cancellato e ricostruito, oppure costruito "ex novo") il container di pycsw, occorre entrare all'interno
+del container con una shell:
+
+ docker exec -it igg-ckan-docker-pycsw bash
+
+e eseguire il seguente comando:
+
+ /app/.venv/bin/pycsw-admin.py -c setup_db -f /etc/pycsw.cfg
